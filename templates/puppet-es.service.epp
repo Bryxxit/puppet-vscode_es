@@ -1,0 +1,21 @@
+<%- |
+    Integer $port,
+    String  $ipaddr,
+    Integer $timeout,
+    Boolean $debug,
+    String  $debugpath
+| -%>
+[Unit]
+Description=Puppet Language Service for Visual Studio Code
+
+[Service]
+SyslogIdentifier=puppet-languageserver
+PIDFile=/opt/puppet-editor-services/puppet-languageserver.pid
+WorkingDirectory=/opt/puppet-editor-services
+
+ExecStart=/opt/puppet-editor-services/puppet-languageserver --timeout=<%= $timeout %> --no-stop -i <%= $ipaddr %> -p 9654<%= $port %> <% if $debug { -%>--debug=<%= $debugpath %>/debug.log <% } %>
+ExecStop=/bin/kill -s QUIT $MAINPID
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

@@ -106,4 +106,31 @@ class vscode_es(
     logoutput   => on_failure,
     environment => "HOME='${installpath}'",
   }
+
+  if $debug {
+    file {$debugpath:
+      ensure  => 'directory',
+      owner   => 'root',
+      group   => 'root',
+      mode    => '0755',
+      require => Vcsrepo[$installpath]
+    }
+  }
+
+  if $manageservice {
+    file {'/etc/systemd/system/puppet-languageserver.service':
+      ensure  => 'file',
+      owner   => 'root',
+      group   => 'root',
+      mode    => '0755',
+      require => Vcsrepo[$installpath]
+    }
+
+    service { 'puppet-languageserver':
+      ensure  => 'running',
+      enable  => true,
+      require => File['/etc/systemd/system/puppet-languageserver.service']
+    }
+  }
+
 }
