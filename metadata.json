@@ -6,7 +6,7 @@
   "license": "Apache-2.0",
   "source": "local",
   "dependencies": [
-    "puppetlabs-vcsrepo"
+    "puppetlabs/vcsrepo"
   ],
   "operatingsystem_support": [
     {
