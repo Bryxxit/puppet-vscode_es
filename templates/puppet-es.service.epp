@@ -1,9 +1,13 @@
 <%- |
-    Integer $port,
-    String  $ipaddr,
+    Optional[Integer] $port,
+    Optional[String]  $ipaddr,
+    Boolean $nostop,
     Integer $timeout,
     Boolean $debug,
-    String  $debugpath
+    Optional[String]  $debugpath,
+    Boolean $slowstart,
+    Boolean $filecache,
+    Optional[String]  $workspace
 | -%>
 [Unit]
 Description=Puppet Language Service for Visual Studio Code
@@ -12,8 +16,15 @@ Description=Puppet Language Service for Visual Studio Code
 SyslogIdentifier=puppet-languageserver
 PIDFile=/opt/puppet-editor-services/puppet-languageserver.pid
 WorkingDirectory=/opt/puppet-editor-services
+ExecStart=/opt/puppet-editor-services/puppet-languageserver --timeout=<%= $timeout -%>
+                                                            <%- if $port { %> -p <%= $port %><% } -%>
+                                                            <%- if $ipaddr { %> -i <%= $ipaddr %><% } -%>
+                                                            <%- if $nostop { %> --no-stop <% } -%>
+                                                            <%- if $debug { -%>--debug=<%= $debugpath %>/debug.log <% } -%>
+                                                            <%- if $slowstart { %> --slow-start <% } -%>
+                                                            <%- if $filecache { %> --enable-file-cache <% } -%>
+                                                            <%- if $workspace { %> --local-workspace=<%= $workspace %><% } -%>
 
-ExecStart=/opt/puppet-editor-services/puppet-languageserver --timeout=<%= $timeout %> --no-stop -i <%= $ipaddr %> -p 9654<%= $port %> <% if $debug { -%>--debug=<%= $debugpath %>/debug.log <% } %>
 ExecStop=/bin/kill -s QUIT $MAINPID
 Restart=always
 

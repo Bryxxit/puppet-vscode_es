@@ -123,6 +123,17 @@ class vscode_es(
       owner   => 'root',
       group   => 'root',
       mode    => '0755',
+      content => epp('vscode_es/puppet-es.service.epp',{
+        port      => $port,
+        ipaddr    => $ipaddr,
+        nostop    => $nostop,
+        timeout   => $timeout,
+        debug     => $debug,
+        debugpath => $debugpath,
+        slowstart => $slowstart,
+        filecache => $filecache,
+        workspace => $workspace
+      }),
       require => Vcsrepo[$installpath]
     }
 
