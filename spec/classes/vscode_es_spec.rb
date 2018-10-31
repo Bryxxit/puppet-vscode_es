@@ -22,10 +22,9 @@ describe 'vscode_es' do
             'ensure' => 'running',
             'enable' => true,
           )
-
         end
       end
-      
+
       context 'minimal install failures' do
         let(:params) { { 'debug' => true } }
 
