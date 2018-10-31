@@ -8,7 +8,7 @@ describe 'vscode_es' do
 
         it { is_expected.to compile }
         it do
-          is_expected.to contain_file('/etc/systemd/system/puppet-languageserver.service').with(  
+          is_expected.to contain_file('/etc/systemd/system/puppet-languageserver.service').with(
             'owner' => 'root',
             'group' => 'root',
             'mode'  => '0755',
