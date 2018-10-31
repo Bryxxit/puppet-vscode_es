@@ -16,7 +16,7 @@ describe 'vscode_es' do
           )
 
           is_expected.to contain_file('/etc/systemd/system/puppet-languageserver.service') \
-            .with_content(/^ExecStart=.* --timeout=10$/)
+            .with_content(%r{^ExecStart=.* --timeout=10$})
 
           is_expected.to contain_service('puppet-languageserver').with(
             'ensure' => 'running',
@@ -27,79 +27,80 @@ describe 'vscode_es' do
       end
       
       context 'minimal install failures' do
-        let(:params) { {'debug' => true} }
-        it { is_expected.to compile.and_raise_error(/If debug == true/)}
+        let(:params) { { 'debug' => true } }
+
+        it { is_expected.to compile.and_raise_error(%r{If debug == true}) }
       end
 
       context 'with port => 9654' do
-        let(:params) { {'port' => 9654} }
+        let(:params) { { 'port' => 9654 } }
 
         it do
           is_expected.to contain_file('/etc/systemd/system/puppet-languageserver.service') \
-            .with_content(/^ExecStart=.* -p 9654$/)
+            .with_content(%r{^ExecStart=.* -p 9654$})
         end
       end
 
       context 'with ipaddr => 0.0.0.0' do
-        let(:params) { {'ipaddr' => '0.0.0.0'}}
+        let(:params) { { 'ipaddr' => '0.0.0.0' } }
 
         it do
           is_expected.to contain_file('/etc/systemd/system/puppet-languageserver.service') \
-            .with_content(/^ExecStart=.* -i 0.0.0.0$/)
+            .with_content(%r{^ExecStart=.* -i 0.0.0.0$})
         end
       end
 
       context 'with nostop => true' do
-        let(:params) { {'nostop' => true}}
+        let(:params) { { 'nostop' => true } }
 
         it do
           is_expected.to contain_file('/etc/systemd/system/puppet-languageserver.service') \
-            .with_content(/^ExecStart=.* --no-stop$/)
+            .with_content(%r{^ExecStart=.* --no-stop$})
         end
       end
 
       context 'with debug => true' do
-        let(:params) { {'debug' => true, 'debugpath' => '/var/log/puppet/puppet-languageserver' }}
+        let(:params) { { 'debug' => true, 'debugpath' => '/var/log/puppet/puppet-languageserver' } }
 
         it do
           is_expected.to contain_file('/etc/systemd/system/puppet-languageserver.service') \
-            .with_content(/^ExecStart=.* --debug=\/var\/log\/puppet\/puppet-languageserver\/debug.log$/)
+            .with_content(%r{^ExecStart=.* --debug=/var/log/puppet/puppet-languageserver/debug.log$})
         end
       end
 
       context 'with slowstart => true' do
-        let(:params) { {'slowstart' => true}}
+        let(:params) { { 'slowstart' => true } }
 
         it do
           is_expected.to contain_file('/etc/systemd/system/puppet-languageserver.service') \
-            .with_content(/^ExecStart=.* --slow-start$/)
+            .with_content(%r{^ExecStart=.* --slow-start$})
         end
       end
 
       context 'with filecache => true' do
-        let(:params) { {'filecache' => true}}
+        let(:params) { { 'filecache' => true } }
 
         it do
           is_expected.to contain_file('/etc/systemd/system/puppet-languageserver.service') \
-            .with_content(/^ExecStart=.* --enable-file-cache$/)
+            .with_content(%r{^ExecStart=.* --enable-file-cache$})
         end
       end
 
       context 'with workspace => /opt/puppetlabs/code' do
-        let(:params) { {'workspace' => '/opt/puppetlabs/code'}}
+        let(:params) { { 'workspace' => '/opt/puppetlabs/code' } }
 
         it do
           is_expected.to contain_file('/etc/systemd/system/puppet-languageserver.service') \
-            .with_content(/^ExecStart=.* --local-workspace=\/opt\/puppetlabs\/code$/)
+            .with_content(%r{^ExecStart=.* --local-workspace=/opt/puppetlabs/code$})
         end
       end
 
       context 'with standard set of params' do
-        let(:params) { {'port' => 9654, 'ipaddr' => '0.0.0.0', 'nostop' => true}}
+        let(:params) { { 'port' => 9654, 'ipaddr' => '0.0.0.0', 'nostop' => true } }
 
         it do
           is_expected.to contain_file('/etc/systemd/system/puppet-languageserver.service') \
-            .with_content(/^ExecStart=.* -p 9654 -i 0.0.0.0 --no-stop$/)
+            .with_content(%r{^ExecStart=.* -p 9654 -i 0.0.0.0 --no-stop$})
         end
       end
     end
