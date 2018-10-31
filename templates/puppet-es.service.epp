@@ -21,7 +21,7 @@ ExecStart=/opt/puppet-editor-services/puppet-languageserver --timeout=<%= $timeo
                                                             <%- if $ipaddr { %> -i <%= $ipaddr %><% } -%>
                                                             <%- if $nostop { %> --no-stop<% } -%>
                                                             <%- if $debug { %> --debug=<%= $debugpath %>/debug.log<% } -%>
-                                                            <%- if $slowstart { %> --slow-start <% } -%>
+                                                            <%- if $slowstart { %> --slow-start<% } -%>
                                                             <%- if $filecache { %> --enable-file-cache<% } -%>
                                                             <%- if $workspace { %> --local-workspace=<%= $workspace %><% } -%>
 
