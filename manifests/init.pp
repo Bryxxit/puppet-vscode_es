@@ -89,10 +89,28 @@ class vscode_es(
   Boolean           $enable        = true,
   Optional[String]  $version       = undef,
 ) {
+
+  # Validate your input
+  #=====================
+  # Debug option validation
+  if ($debug and !$debugpath) {
+    fail('If debug == true, than set a $debugpath as well!')
+  }
+  if ($debugpath and !$debug) {
+    notice('The debugpath will not be set if $debug == false')
+  }
+
+  #Version validation
+  if $version{
+    $_version = $version
+  } else {
+    $_version = 'latest'
+  }
   vcsrepo {$installpath:
     ensure   => 'present',
     provider => 'git',
     source   => 'https://github.com/lingua-pupuli/puppet-editor-services.git',
+    revision => $_version,
   }
 
   exec {'bundle install':
