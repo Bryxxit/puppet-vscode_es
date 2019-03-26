@@ -1,15 +1,5 @@
 
-# vscode_es
-
-Welcome to your new module. A short overview of the generated parts can be found in the PDK documentation at https://puppet.com/pdk/latest/pdk_generating_modules.html .
-
-The README template below provides a starting point with details about what information to include in your README.
-
-
-
-
-
-
+# puppet-vscode_es
 
 #### Table of Contents
 
@@ -25,57 +15,64 @@ The README template below provides a starting point with details about what info
 
 ## Description
 
-Start with a one- or two-sentence summary of what the module does and/or what problem it solves. This is your 30-second elevator pitch for your module. Consider including OS/Puppet version it works with.
+This module will install and manage a central Visual Studio Code Editor Service you can use to optimize your Puppet development cycle.
 
-You can give more descriptive information in a second paragraph. This paragraph should answer the questions: "What does this module *do*?" and "Why would I use it?" If your module has a range of functionality (installation, configuration, management, etc.), this is the time to mention it.
+The Language server used can be found at [https://github.com/lingua-pupuli/puppet-editor-services](https://github.com/lingua-pupuli/puppet-editor-services) where it is maintained by Glennsarti and jpogran (many thanks!)
 
 ## Setup
 
 ### What vscode_es affects **OPTIONAL**
 
-If it's obvious what your module touches, you can skip this section. For example, folks can probably figure out that your mysql_instance module affects their MySQL instances.
+The module will use Git (vcsrepo module) to get the editor service binaries from github.
 
-If there's more that they should know about, though, this is the place to mention:
-
-* Files, packages, services, or operations that the module will alter, impact, or execute.
-* Dependencies that your module automatically installs.
-* Warnings or other important notices.
+It will setup a systemd service with the requested parameters and (if needed) will create a log file in the configured location.
 
 ### Setup Requirements **OPTIONAL**
 
-If your module requires anything extra before setting up (pluginsync enabled, another module, etc.), mention it here.
-
-If your most recent release breaks compatibility or requires particular steps for upgrading, you might want to include an additional "Upgrading" section here.
+Make sure your server can access github. This module will (for now) not work with a local repo. It will always try to pull from the offical github repo.
 
 ### Beginning with vscode_es
 
-The very basic steps needed for a user to get the module up and running. This can include setup steps, if necessary, or it can be an example of the most basic use of the module.
+`include vscode_es` is enough to get you up and running. To pass in parameters specifying which servers to use:
+```puppet
+class{'vscode_es':
+    port => 9876,
+}
+```
 
 ## Usage
 
-This section is where you describe how to customize, configure, and do the fancy stuff with your module here. It's especially helpful if you include usage examples and code samples for doing things with your module.
+All parameters for the vscode_es module are contained within the main `vscode_es` class, so for any function of the module, set the options you want. See the common usages below for examples.
+
+**Install and enable the editor service**
+```puppet
+include vscode_es
+```
+
+**Listen on custom IP and port**
+```puppet
+class{'vscode_es':
+    ip => '192.168.0.2',
+    port => 9876,
+}
+```
+
+**Enable debug log**
+```puppet
+class{'vscode_es':
+    debug => true,
+    debugpath => '/var/log/puppet/languageserver',
+}
+```
 
 ## Reference
 
-Users need a complete list of your module's classes, types, defined types providers, facts, and functions, along with the parameters for each. You can provide this list either via Puppet Strings code comments or as a complete list in the README Reference section.
-
-* If you are using Puppet Strings code comments, this Reference section should include Strings information so that your users know how to access your documentation.
-
-* If you are not using Puppet Strings, include a list of all of your classes, defined types, and so on, along with their parameters. Each element in this listing should include:
-
-  * The data type, if applicable.
-  * A description of what the element does.
-  * Valid values, if the data type doesn't make it obvious.
-  * Default value, if any.
+see [REFERENCE.MD](REFERENCE.md)
 
 ## Limitations
 
-This is where you list OS compatibility, version compatibility, etc. If there are Known Issues, you might want to include them under their own heading here.
+This code can only run on *nix systems using `systemd` (older `init.d` scripts are not included)
 
 ## Development
 
-Since your module is awesome, other users will want to play with it. Let them know what the ground rules for contributing are.
-
-## Release Notes/Contributors/Etc. **Optional**
-
-If you aren't using changelog, put your release notes here (though you should consider using changelog). You can also add any additional sections you feel are necessary or important to include here. Please use the `## ` header.
+Feedback, bugfixes, feature requests or Pull Requests are welcome.
